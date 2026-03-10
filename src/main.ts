@@ -29,3 +29,11 @@ new Phaser.Game({
   },
   scene: [BootScene, PreloadScene, MainMenuScene, GameScene, UIScene, SettingsScene]
 });
+
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
+      // Ignore registration failures to avoid blocking game startup.
+    });
+  });
+}

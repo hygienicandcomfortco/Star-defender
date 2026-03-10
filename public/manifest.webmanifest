@@ -1,0 +1,32 @@
+{
+  "name": "Star Defender",
+  "short_name": "Defender",
+  "description": "Arcade UFO survival shooter with mobile controls.",
+  "start_url": "/Star-defender/",
+  "scope": "/Star-defender/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/Star-defender/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Star-defender/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Star-defender/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

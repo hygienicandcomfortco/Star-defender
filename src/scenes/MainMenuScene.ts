@@ -71,11 +71,13 @@ export class MainMenuScene extends Phaser.Scene {
 
     this.settingsKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.O);
     this.settingsKey?.on("down", this.openSettings, this);
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.settingsKey?.off("down", this.openSettings, this);
       this.input.keyboard?.off("keydown-SPACE", this.startRun, this);
       this.input.keyboard?.off("keydown-ENTER", this.startRun, this);
       this.input.off("pointerdown", this.startRun, this);
+      this.scale.off(Phaser.Scale.Events.RESIZE, this.onResize, this);
     });
   }
 
@@ -86,9 +88,18 @@ export class MainMenuScene extends Phaser.Scene {
 
     this.launchStarted = true;
     audioService.unlock();
+    if (this.scale.game.device.input.touch && !this.scale.isFullscreen) {
+      this.scale.startFullscreen();
+    }
     audioService.playMenuConfirm();
     this.scene.start("game");
     this.scene.launch("ui");
+  }
+
+  private onResize(): void {
+    if (this.scene.isActive()) {
+      this.scene.restart();
+    }
   }
 
   private openSettings(): void {
