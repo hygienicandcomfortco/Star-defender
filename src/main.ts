@@ -6,28 +6,17 @@ import { GameScene } from "./scenes/GameScene";
 import { UIScene } from "./scenes/UIScene";
 import { SettingsScene } from "./scenes/SettingsScene";
 
-const GAME_WIDTH = 1280;
-const GAME_HEIGHT = 720;
-
 new Phaser.Game({
   type: Phaser.AUTO,
   parent: "app",
   backgroundColor: "#020617",
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     expandParent: true,
     autoRound: true,
-    width: GAME_WIDTH,
-    height: GAME_HEIGHT,
-    min: {
-      width: 480,
-      height: 270
-    },
-    max: {
-      width: 2560,
-      height: 1440
-    }
+    width: "100%",
+    height: "100%"
   },
   input: {
     activePointers: 3

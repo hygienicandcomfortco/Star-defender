@@ -887,12 +887,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onResize(gameSize: Phaser.Structs.Size): void {
-    if (!this.touchControlsEnabled) {
-      return;
-    }
-
     this.physics.world.setBounds(0, 0, gameSize.width, gameSize.height);
-    this.layoutMobileControls();
+    if (this.touchControlsEnabled) {
+      this.layoutMobileControls();
+    }
   }
 
   private layoutMobileControls(): void {
