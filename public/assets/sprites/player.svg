@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <defs>
+    <linearGradient id="jetBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <path d="M40 8l10 22 18 18-14 3-8 20-6-16-6 16-8-20-14-3 18-18z" fill="url(#jetBody)" stroke="#0f172a" stroke-width="2"/>
+  <rect x="35" y="22" width="10" height="16" rx="4" fill="#0ea5e9"/>
+  <path d="M37 70h6l-3 8z" fill="#f97316"/>
+</svg>

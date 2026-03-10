@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="220" viewBox="0 0 1020 220">
+  <defs>
+    <linearGradient id="spaceA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="spaceB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="1004" height="204" rx="26" fill="#020617" stroke="#2563eb" stroke-width="6"/>
+  <g transform="translate(40 38)">
+    <rect x="0" y="0" width="140" height="140" rx="24" fill="#071635" stroke="#38bdf8" stroke-width="4"/>
+    <path d="M70 18l16 34h34l-28 23 10 35-32-21-32 21 10-35-28-23h34z" fill="url(#spaceA)"/>
+  </g>
+  <text x="220" y="105" fill="url(#spaceA)" font-size="72" font-family="Verdana" font-weight="700">STAR DEFENDER</text>
+  <text x="224" y="154" fill="url(#spaceB)" font-size="31" font-family="Verdana" font-weight="700">EARTH STRIKE COMMAND</text>
+</svg>

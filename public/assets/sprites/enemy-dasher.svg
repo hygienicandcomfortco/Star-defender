@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72">
+  <defs>
+    <linearGradient id="raiderA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <path d="M10 40h52l-10 14H20z" fill="#7f1d1d"/>
+  <path d="M36 12l24 28H12z" fill="url(#raiderA)"/>
+  <circle cx="36" cy="35" r="6" fill="#fee2e2"/>
+</svg>
