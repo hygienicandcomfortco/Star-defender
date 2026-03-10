@@ -90,6 +90,8 @@ export class GameScene extends Phaser.Scene {
   private mobileFireDown = false;
   private mouseFireDown = false;
   private mouseFirePointerId: number | null = null;
+  private pauseButton?: Phaser.GameObjects.Container;
+  private pauseButtonBg?: Phaser.GameObjects.Arc;
   private joystickCenter = new Phaser.Math.Vector2(0, 0);
   private readonly joystickRadius = 58;
   private readonly joystickKnobTravel = 34;
@@ -226,6 +228,7 @@ export class GameScene extends Phaser.Scene {
       this.input.off(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
       this.input.off(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
       this.input.off(Phaser.Input.Events.POINTER_UP_OUTSIDE, this.onPointerUp, this);
+      this.pauseButtonBg?.off(Phaser.Input.Events.POINTER_DOWN);
     });
   }
 
@@ -794,7 +797,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.input.addPointer(2);
-    this.scale.lockOrientation("landscape");
 
     this.joystickBase = this.add.circle(0, 0, this.joystickRadius, 0x0f172a, 0.35)
       .setStrokeStyle(2, 0x38bdf8, 0.7)
@@ -812,6 +814,22 @@ export class GameScene extends Phaser.Scene {
     this.fireTouchArea = this.add.zone(0, 0, 170, 170)
       .setDepth(959)
       .setInteractive();
+
+    const pauseBg = this.add.circle(0, 0, 32, 0x0f172a, 0.52)
+      .setStrokeStyle(2, 0x93c5fd, 0.85)
+      .setDepth(963)
+      .setInteractive();
+    const pauseIcon = this.add.text(0, 0, "II", {
+      fontFamily: "Verdana",
+      fontSize: "26px",
+      color: "#e2e8f0",
+      fontStyle: "bold"
+    }).setOrigin(0.5).setDepth(964);
+    this.pauseButtonBg = pauseBg;
+    this.pauseButton = this.add.container(0, 0, [pauseBg, pauseIcon]).setDepth(963);
+    pauseBg.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      this.togglePauseMenu();
+    });
 
     this.layoutMobileControls();
 
@@ -909,6 +927,7 @@ export class GameScene extends Phaser.Scene {
 
     this.fireButton?.setPosition(fireX, fireY);
     this.fireTouchArea?.setPosition(fireX, fireY);
+    this.pauseButton?.setPosition(this.scale.width - 62, 62);
   }
 
   private updateOverdriveFlame(delta: number): void {

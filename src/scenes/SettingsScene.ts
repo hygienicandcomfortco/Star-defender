@@ -20,6 +20,8 @@ export class SettingsScene extends Phaser.Scene {
   private statusLabelsText?: Phaser.GameObjects.Text;
   private statusValuesText?: Phaser.GameObjects.Text;
   private profile!: GameProfile;
+  private uiScale = 1;
+  private compact = false;
 
   public constructor() {
     super("settings");
@@ -35,55 +37,62 @@ export class SettingsScene extends Phaser.Scene {
     audioService.bind(this);
     this.profile = this.registry.get("profile") as GameProfile;
     const { width, height } = this.scale;
-    const panelWidth = Math.min(980, width - 70);
-    const panelHeight = Math.min(620, height - 70);
+    this.uiScale = Phaser.Math.Clamp(Math.min(width / 1280, height / 720), 0.54, 1);
+    this.compact = width < 900;
+    const panelMargin = this.compact ? 20 : 70;
+    const panelWidth = Math.min(980 * this.uiScale, width - panelMargin);
+    const panelHeight = Math.min(620 * this.uiScale, height - panelMargin);
     const panelX = width * 0.5;
     const panelY = height * 0.5;
     const panelTop = panelY - panelHeight * 0.5;
-    const statsLabelX = panelX - panelWidth * 0.39;
-    const statsValueX = panelX - panelWidth * 0.12;
-    const controlsX = panelX + panelWidth * 0.16;
+    const statsLabelX = panelX - panelWidth * (this.compact ? 0.44 : 0.39);
+    const statsValueX = panelX - panelWidth * (this.compact ? 0.1 : 0.12);
+    const controlsX = panelX + panelWidth * (this.compact ? 0.05 : 0.16);
 
     this.add.rectangle(width * 0.5, height * 0.5, width, height, 0x020617, 0.9);
     this.add.rectangle(panelX, panelY, panelWidth, panelHeight, 0x0b1730, 0.97).setStrokeStyle(3, 0x0ea5e9, 0.9);
-    this.add.rectangle(panelX, panelTop + 64, panelWidth - 28, 94, 0x0f254d, 0.9).setStrokeStyle(1, 0x38bdf8, 0.45);
+    this.add.rectangle(panelX, panelTop + 64 * this.uiScale, panelWidth - 28 * this.uiScale, 94 * this.uiScale, 0x0f254d, 0.9)
+      .setStrokeStyle(1, 0x38bdf8, 0.45);
 
-    this.add.image(panelX - panelWidth * 0.39, panelTop + 64, "logo-mark").setDisplaySize(56, 56);
-    this.add.text(panelX - panelWidth * 0.31, panelTop + 64, "STAR DEFENDER", {
+    this.add.image(panelX - panelWidth * 0.39, panelTop + 64 * this.uiScale, "logo-mark")
+      .setDisplaySize(56 * this.uiScale, 56 * this.uiScale);
+    this.add.text(panelX - panelWidth * 0.31, panelTop + 64 * this.uiScale, "STAR DEFENDER", {
       fontFamily: "Verdana",
-      fontSize: "36px",
+      fontSize: `${Math.round(36 * this.uiScale)}px`,
       color: "#38bdf8",
       fontStyle: "bold"
     }).setOrigin(0, 0.5);
-    this.add.text(panelX + panelWidth * 0.19, panelTop + 64, "COMMAND", {
+    this.add.text(panelX + panelWidth * 0.19, panelTop + 64 * this.uiScale, "COMMAND", {
       fontFamily: "Verdana",
-      fontSize: "40px",
+      fontSize: `${Math.round(40 * this.uiScale)}px`,
       color: "#22d3ee",
       fontStyle: "bold"
     }).setOrigin(0.5);
 
     this.statusLabelsText = this.add.text(statsLabelX, panelTop + 138, "", {
       fontFamily: "Verdana",
-      fontSize: "23px",
+      fontSize: `${Math.round(23 * this.uiScale)}px`,
       color: "#e2e8f0",
-      lineSpacing: 12
+      lineSpacing: Math.round(12 * this.uiScale)
     }).setOrigin(0, 0);
     this.statusValuesText = this.add.text(statsValueX, panelTop + 138, "", {
       fontFamily: "Verdana",
-      fontSize: "23px",
+      fontSize: `${Math.round(23 * this.uiScale)}px`,
       color: "#e2e8f0",
-      lineSpacing: 12
+      lineSpacing: Math.round(12 * this.uiScale)
     }).setOrigin(0, 0);
 
     const rowY = {
-      mute: panelTop + 238,
-      master: panelTop + 305,
-      music: panelTop + 372,
-      sfx: panelTop + 439,
-      reset: panelTop + 506
+      mute: panelTop + 238 * this.uiScale,
+      master: panelTop + 305 * this.uiScale,
+      music: panelTop + 372 * this.uiScale,
+      sfx: panelTop + 439 * this.uiScale,
+      reset: panelTop + 506 * this.uiScale
     };
+    const mainButtonWidth = Math.round(330 * this.uiScale);
+    const mainButtonHeight = Math.round(48 * this.uiScale);
 
-    this.createButton(controlsX, rowY.mute, 330, 48, "Toggle Mute", () => {
+    this.createButton(controlsX, rowY.mute, mainButtonWidth, mainButtonHeight, "Toggle Mute", () => {
       this.profile.settings.muted = !this.profile.settings.muted;
       this.commitProfile();
     });
@@ -112,15 +121,22 @@ export class SettingsScene extends Phaser.Scene {
       this.commitProfile();
     });
 
-    this.createButton(controlsX, rowY.reset, 330, 48, "Reset Save Profile", () => {
+    this.createButton(controlsX, rowY.reset, mainButtonWidth, mainButtonHeight, "Reset Save Profile", () => {
       this.profile = ProfileStore.reset();
       this.registry.set("state", createRuntimeGameState(this.profile.bestScore) satisfies RuntimeGameState);
       this.commitProfile();
     });
 
-    this.createButton(panelX, panelTop + panelHeight - 34, 230, 46, "Close (Esc)", () => {
+    this.createButton(
+      panelX,
+      panelTop + panelHeight - 34 * this.uiScale,
+      Math.round(230 * this.uiScale),
+      Math.round(46 * this.uiScale),
+      this.compact ? "Close" : "Close (Esc)",
+      () => {
       this.closeSettings();
-    });
+      }
+    );
 
     this.input.keyboard?.on("keydown-ESC", this.closeSettings, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -136,14 +152,14 @@ export class SettingsScene extends Phaser.Scene {
     onMinus: () => void,
     onPlus: () => void
   ): void {
-    this.add.text(x - 164, y, `${label} Volume`, {
+    this.add.text(x - 164 * this.uiScale, y, `${label} Volume`, {
       fontFamily: "Verdana",
-      fontSize: "20px",
+      fontSize: `${Math.round(20 * this.uiScale)}px`,
       color: "#bfdbfe"
     }).setOrigin(0, 0.5);
 
-    this.createButton(x + 76, y, 62, 42, "-", onMinus);
-    this.createButton(x + 150, y, 62, 42, "+", onPlus);
+    this.createButton(x + 76 * this.uiScale, y, Math.round(62 * this.uiScale), Math.round(42 * this.uiScale), "-", onMinus);
+    this.createButton(x + 150 * this.uiScale, y, Math.round(62 * this.uiScale), Math.round(42 * this.uiScale), "+", onPlus);
   }
 
   private createButton(
@@ -157,7 +173,7 @@ export class SettingsScene extends Phaser.Scene {
     const bg = this.add.rectangle(0, 0, width, height, 0x0b3c66, 0.88).setStrokeStyle(1, 0x38bdf8, 0.65);
     const label = this.add.text(0, 0, text, {
       fontFamily: "Verdana",
-      fontSize: "24px",
+      fontSize: `${Math.round(24 * this.uiScale)}px`,
       color: "#dbeafe"
     }).setOrigin(0.5);
 
